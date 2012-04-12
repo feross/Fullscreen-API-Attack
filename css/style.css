@@ -257,28 +257,30 @@ header {
   height: 0;
 }
 
-.osx.chrome #menu {
+.chrome.osx #menu {
   background: url(../img/menu-osx-chrome-left.png) left top no-repeat, url(../img/menu-osx-right.png) right top no-repeat, url(../img/menu-osx-bg.png) left top repeat-x;
   height: 22px;
 }
 
-.osx.chrome #browser {
+.chrome.osx #browser {
   background: url(../img/browser-osx-chrome-left.png) left top no-repeat, url(../img/browser-osx-chrome-right.png) right top no-repeat, url(../img/browser-osx-chrome-bg.png) left top repeat-x;
   height: 72px;
 }
 
-.osx.firefox #menu {
+.chrome.windows #browser {
+  background: url(../img/browser-windows-chrome-left.png) left top no-repeat, url(../img/browser-windows-chrome-right.png) right top no-repeat, url(../img/browser-windows-chrome-bg.png) left top repeat-x;
+  height: 61px;
+}
+
+.firefox.osx #menu {
   background: url(../img/menu-osx-firefox-left.png) left top no-repeat, url(../img/menu-osx-right.png) right top no-repeat, url(../img/menu-osx-bg.png) left top repeat-x;
 
 }
 
-.osx.firefox #browser {
-  background: url(../img/browser-osx-firefox-left.png) left top no-repeat, url(../img/browser-osx-firefox-right.png) right top no-repeat, url(../img/browser-osx-firefox-center.png) center top no-repeat, url(../img/browser-osx-firefox-bg.png) left top repeat-x;
+.firefox.osx #browser {
+  background: url(../img/browser-osx-firefox-center.png) center top no-repeat, url(../img/browser-osx-firefox-left.png) left top no-repeat, url(../img/browser-osx-firefox-right.png) right top no-repeat, url(../img/browser-osx-firefox-bg.png) left top repeat-x;
   height: 87px;
 }
-
-
-
 
 
 

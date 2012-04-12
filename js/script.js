@@ -105,12 +105,13 @@ $.facebox.settings.loadingImage = 'img/facebox/loading.gif';
 var errors = [];
 if (fullscreenSupport) {
 
-  log(BrowserDetect);
   // Browser detect
   if (BrowserDetect.browser == "Chrome") {
     $('html').addClass('chrome');
   } else if (BrowserDetect.browser == "Firefox") {
     $('html').addClass('firefox');
+  } else if (BrowserDetect.browser == "Safari") {
+    errors.push("Your browser (Safari) claims to support the Fullscreen API, but as far I can tell, it doesn't allow Javascript to trigger fullscreen mode (as of version 5.1.5). The demo probably will not work. Try Chrome or Firefox.");
   } else {
     $('html').addClass('chrome'); // fallback to wrong UI
     errors.push("Your browser supports the Fullscreen API! However, it didn't support it when I made this demo. The <b>demo will still work</b> but you will see Chrome's UI instead of your own browser's UI.");
@@ -149,7 +150,7 @@ function setup() {
   $('html').off('click keypress');
   $('html').on('click keypress', '#links a', function(e) {
     
-    // $('html')[0].requestFullScreen();
+    $('html')[0].requestFullScreen();
 
     $('#links').hide();
     $('#menu, #browser').show();
@@ -165,7 +166,9 @@ function setup() {
     $('html').on('click keypress', function() {
       $('#menu').effect('shake');
       $('#browser').effect('shake');
-      $.facebox({div: '#phished'});
+      setTimeout(function() {
+        $.facebox({div: '#phished'});
+      }, 600);
     });
 
     e.preventDefault();
