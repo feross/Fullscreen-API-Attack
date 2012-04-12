@@ -1,15 +1,3 @@
-// Emulates UI of:
-// - current browser (TODO)
-// - current OS (TODO)
-// - handles arbitrary screen resolutions
-
-// Attack works whether user starts out in fullscreen mode or not
-// - In fact, it's even more convincing when user is already fullscreened
-
-
-
-// TODO: message when no fullscreen support
-
 // Fullscreen API Shim adapted from:
 // https://github.com/toji/game-shim/blob/master/game-shim.js
 
@@ -168,7 +156,7 @@ function setup() {
       $('#browser').effect('shake');
       setTimeout(function() {
         $.facebox({div: '#phished'});
-      }, 600);
+      }, 1000);
     });
 
     e.preventDefault();

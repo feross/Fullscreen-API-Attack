@@ -282,7 +282,10 @@ header {
   height: 87px;
 }
 
-
+.firefox.windows #browser {
+  background: url(../img/browser-windows-firefox-left.png) left top no-repeat, url(../img/browser-windows-firefox-right.png) right top no-repeat, url(../img/browser-windows-firefox-bg.png) left top repeat-x;
+  height: 63px;
+}
 
 
 
