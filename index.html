@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js osx" lang="en">
 <head>
   <meta charset="utf-8">
 
@@ -9,8 +9,13 @@
   <meta name="description" content="">
 
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/facebox.css"
 </head>
 <body>
+  <header>
+    <div style="display: none;" id="menu"></div>
+    <div style="display: none;" id="browser"></div>
+  </header>
 
   <div id="links">
     <a id="boaLink" href="https://www.bankofamerica.com">Bank Of America</a>
@@ -20,7 +25,16 @@
     <div id="boa" style="display: none;"><img src="img/boa.png"></div>
   </div>
 
+  <div id="phished" style="display: none;">
+    <p><b>Careful, there! Don't get phished.</b><br><br>
+    <img src="img/surprised-gasp-l.png"><br><br>
+    You're looking at fake OS and browser UI.</p>
+  </div>
+
   <script src="js/libs/jquery-1.7.2.js"></script>
+  <script src="js/libs/jquery-ui-1.8.18.custom.min.js"></script>
+  <script src="js/libs/facebox.js"></script>
+  <script src="js/libs/browser-detect.js"></script>
   <script src="js/plugins.js"></script>
   <script src="js/script.js"></script>
 

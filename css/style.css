@@ -219,6 +219,7 @@ td { vertical-align: top; }
    ========================================================================== */
 
 html {
+  overflow-y: hidden;
   background-color: #fff;
 }
 
@@ -226,13 +227,55 @@ html {
   width: 1000px;
 }
 
+#spoofedSites {
+  width: 100%;
+  position: relative;
+  overflow-y: scroll;
+}
+
 #spoofedSites div {
   margin: 0 auto;
 }
 
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+}
 
+#menu, #browser {
+  width: 100%;
+}
 
+.osx #menu {
+  height: 22px;
+}
 
+.windows #menu {
+  height: 0;
+}
+
+.osx.chrome #menu {
+  background: url(../img/menu-osx-chrome-left.png) left top no-repeat, url(../img/menu-osx-right.png) right top no-repeat, url(../img/menu-osx-bg.png) left top repeat-x;
+  height: 22px;
+}
+
+.osx.chrome #browser {
+  background: url(../img/browser-osx-chrome-left.png) left top no-repeat, url(../img/browser-osx-chrome-right.png) right top no-repeat, url(../img/browser-osx-chrome-bg.png) left top repeat-x;
+  height: 72px;
+}
+
+.osx.firefox #menu {
+  background: url(../img/menu-osx-firefox-left.png) left top no-repeat, url(../img/menu-osx-right.png) right top no-repeat, url(../img/menu-osx-bg.png) left top repeat-x;
+
+}
+
+.osx.firefox #browser {
+  background: url(../img/browser-osx-firefox-left.png) left top no-repeat, url(../img/browser-osx-firefox-right.png) right top no-repeat, url(../img/browser-osx-firefox-center.png) center top no-repeat, url(../img/browser-osx-firefox-bg.png) left top repeat-x;
+  height: 87px;
+}
 
 
 

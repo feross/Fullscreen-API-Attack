@@ -1,4 +1,14 @@
-// TODO: compress images
+// Emulates UI of:
+// - current browser (TODO)
+// - current OS (TODO)
+// - handles arbitrary screen resolutions
+
+// Attack works whether user starts out in fullscreen mode or not
+// - In fact, it's even more convincing when user is already fullscreened
+
+
+
+// TODO: message when no fullscreen support
 
 // Fullscreen API Shim adapted from:
 // https://github.com/toji/game-shim/blob/master/game-shim.js
@@ -89,46 +99,112 @@ if(!document.exitFullscreen) {
     })();
 }
 
+$.facebox.settings.closeImage = 'img/facebox/closelabel.png';
+$.facebox.settings.loadingImage = 'img/facebox/loading.gif';
+
+var errors = [];
+if (fullscreenSupport) {
+
+  log(BrowserDetect);
+  // Browser detect
+  if (BrowserDetect.browser == "Chrome") {
+    $('html').addClass('chrome');
+  } else if (BrowserDetect.browser == "Firefox") {
+    $('html').addClass('firefox');
+  } else {
+    $('html').addClass('chrome'); // fallback to wrong UI
+    errors.push("Your browser supports the Fullscreen API! However, it didn't support it when I made this demo. The <b>demo will still work</b> but you will see Chrome's UI instead of your own browser's UI.");
+  }
+
+  // OS detect
+  if (BrowserDetect.OS == "Mac") {
+    $('html').addClass('osx');
+  } else if (BrowserDetect.OS == "Windows") {
+    $('html').addClass('windows');
+  } else {
+    errors.push("You're not using Windows or Mac OS X. The <b>demo will still work</b> but you will see the Mac UI instead of your own OS's UI. I didn't have time to take a million screenshots!");
+  }
+
+} else {
+  errors.push("Your browser does not support the Fullscreen API. Sorry - this demo will not work for you. Try Chrome or Firefox.");
+}
+
+if (errors.length) {
+  var str = "";
+  $.each(errors, function(i, error) {
+    str += error;
+    if (i != errors.length - 1) {
+      str += "<br><br>";
+    }
+  });
+
+  $.facebox(str);
+}
+
+function setup() {
+  $('#links').show();
+  $('#spoofedSites div').hide();
+  $('#menu, #browser').hide();
+
+  $('html').off('click keypress');
+  $('html').on('click keypress', '#links a', function(e) {
+    
+    // $('html')[0].requestFullScreen();
+
+    $('#links').hide();
+    $('#menu, #browser').show();
+
+    var windowHeight = $(window).height();
+    var headerHeight = $('header').height();
+    $('#spoofedSites').css({
+      top: headerHeight,
+      height: windowHeight - headerHeight
+    });
+
+    $('html').off('click keypress');
+    $('html').on('click keypress', function() {
+      $('#menu').effect('shake');
+      $('#browser').effect('shake');
+      $.facebox({div: '#phished'});
+    });
+
+    e.preventDefault();
+    e.stopPropagation();
+  });
+
+  $('html').on('click keypress', '#boaLink', function(e) {
+    $('#boa').show();
+  });
+}
+
 
 $(function() {
-
-  var setup = function() {
-    $('#links').show();
-    $('#spoofedSites div').hide();
-
-    $('html').on('click keypress', '#links a', function(e) {
-      
-      $('html')[0].requestFullScreen();
-      $('#links').hide();
-      $('html').off('click keypress');
-
-      log(e, e);
-
-      e.preventDefault();
-      e.stopPropagation();
-    });
-
-    $('html').on('click keypress', '#boaLink', function(e) {
-      $('#boa').show();
-    });
-  };
 
   $(document).on('fullscreenchange', function(test) {
     
     if (!document.fullscreenEnabled) {
       setup();
-
-    } else {
-
+    
     }
 
   });
+
   setup();
 
 });
 
 
+$(window).load(function() {
+  
+  // preload images
+  $('#spoofedSites img').each(function(i, img) {
+    var temp = new Image();
+    temp.src = img.src;
+    
+    log(img.src);
+  });
 
+});
 
 
 
