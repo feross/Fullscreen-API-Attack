@@ -152,11 +152,10 @@ function setup() {
 
     $('html').off('click keypress');
     $('html').on('click keypress', function() {
-      $('#menu').effect('shake');
-      $('#browser').effect('shake');
-      setTimeout(function() {
+      playMarioSound();
+      $('#menu, #browser').stop().effect('shake', function() {
         $.facebox({div: '#phished'});
-      }, 1000);
+      });
     });
 
     e.preventDefault();
@@ -166,6 +165,10 @@ function setup() {
   $('html').on('click keypress', '#boaLink', function(e) {
     $('#boa').show();
   });
+}
+
+function playMarioSound() {
+  $('body').append('<audio preload="auto" autoplay><source src="sound/mario-death.mp3" /><source src="sound/mario-death.ogg" /></audio>');
 }
 
 
@@ -196,11 +199,6 @@ $(window).load(function() {
   });
 
 });
-
-
-
-
-
 
 
 
