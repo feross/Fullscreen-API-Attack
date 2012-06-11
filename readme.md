@@ -7,5 +7,3 @@ Attack works whether user starts out in fullscreen mode or not
 - In fact, it's even more convincing when user is already fullscreened
 
 Attack preloads all images in background so that UI doesn't flash when images are load
-
-TODO: message when no fullscreen support
