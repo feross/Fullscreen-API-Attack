@@ -1,205 +1,118 @@
-// Fullscreen API Shim adapted from:
-// https://github.com/toji/game-shim/blob/master/game-shim.js
+// Copyright 2012 Feross Aboukhadijeh (http://feross.org) (feross@feross.org)
 
-var elementPrototype = (window.HTMLElement || window.Element)["prototype"];
-var getter;
-var fullscreenSupport = true;
+$.facebox.settings.closeImage = '/hacks/fullscreen-api-attack/img/facebox/closelabel.png';
+$.facebox.settings.loadingImage = '/hacks/fullscreen-api-attack/img/facebox/loading.gif';
 
-// document.isFullScreen
-if(!document.hasOwnProperty("fullscreenEnabled")) {
-    getter = (function() {
-        // These are the functions that match the spec, and should be preferred
-        if("webkitIsFullScreen" in document) {
-            return function() { return document.webkitIsFullScreen; };
-        }
-        if("mozFullScreen" in document) {
-            return function() { return document.mozFullScreen; };
-        }
 
-        fullscreenSupport = false;
-        return function() { return false; }; // not supported, never fullscreen
-    })();
-    
-    Object.defineProperty(document, "fullscreenEnabled", {
-        enumerable: true, configurable: false, writeable: false,
-        get: getter
-    });
-}
-
-if(!document.hasOwnProperty("fullscreenElement")) {
-    getter = (function() {
-        // These are the functions that match the spec, and should be preferred
-        if("webkitFullscreenElement" in document) {
-            return function() { return document.webkitFullscreenElement; };
-        }
-        if("mozFullscreenElement" in document) {
-            return function() { return document.mozFullscreenElement; };
-        }
-        return function() { return null; }; // not supported
-    })();
-    
-    Object.defineProperty(document, "fullscreenElement", {
-        enumerable: true, configurable: false, writeable: false,
-        get: getter
-    });
-}
-
-// Document event: fullscreenchange
-function fullscreenchange(oldEvent) {
-    var newEvent = document.createEvent("CustomEvent");
-    newEvent.initCustomEvent("fullscreenchange", true, false, null);
-    // TODO: Any need for variable copy?
-    document.dispatchEvent(newEvent);
-}
-document.addEventListener("webkitfullscreenchange", fullscreenchange, false);
-document.addEventListener("mozfullscreenchange", fullscreenchange, false);
-
-// Document event: fullscreenerror
-function fullscreenerror(oldEvent) {
-    var newEvent = document.createEvent("CustomEvent");
-    newEvent.initCustomEvent("fullscreenerror", true, false, null);
-    // TODO: Any need for variable copy?
-    document.dispatchEvent(newEvent);
-}
-document.addEventListener("webkitfullscreenerror", fullscreenerror, false);
-document.addEventListener("mozfullscreenerror", fullscreenerror, false);
-
-// element.requestFullScreen
-if(!elementPrototype.requestFullScreen) {
-    elementPrototype.requestFullScreen = (function() {
-        if(elementPrototype.webkitRequestFullScreen) {
-            return function() {
-                this.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-            };
-        }
-        
-        return  elementPrototype.mozRequestFullScreen ||
-                function(){ /* unsupported, fail silently */ };
-    })();
-}
-
-// document.exitFullscreen
-if(!document.exitFullscreen) {
-    document.exitFullscreen = (function() {
-        return  document.webkitExitFullscreen ||
-                document.mozExitFullscreen ||
-                function(){ /* unsupported, fail silently */ };
-    })();
-}
-
-$.facebox.settings.closeImage = 'img/facebox/closelabel.png';
-$.facebox.settings.loadingImage = 'img/facebox/loading.gif';
-
-var errors = [];
-if (fullscreenSupport) {
-
-  // Browser detect
-  if (BrowserDetect.browser == "Chrome") {
-    $('html').addClass('chrome');
-  } else if (BrowserDetect.browser == "Firefox") {
-    $('html').addClass('firefox');
-  } else if (BrowserDetect.browser == "Safari") {
-    errors.push("Your browser (Safari) claims to support the Fullscreen API, but as far I can tell, it doesn't allow Javascript to trigger fullscreen mode (as of version 5.1.5). The demo probably will not work. Try Chrome or Firefox.");
+function requestFullScreen() {
+  if (elementPrototype.requestFullScreen) {
+    document.documentElement.requestFullScreen();
+  } else if (elementPrototype.webkitRequestFullScreen) {
+    document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+  } else if (elementPrototype.mozRequestFullScreen) {
+    document.documentElement.mozRequestFullScreen();
   } else {
-    $('html').addClass('chrome'); // fallback to wrong UI
-    errors.push("Your browser supports the Fullscreen API! However, it didn't support it when I made this demo. The <b>demo will still work</b> but you will see Chrome's UI instead of your own browser's UI.");
+    /* fail silently */
   }
-
-  // OS detect
-  if (BrowserDetect.OS == "Mac") {
-    $('html').addClass('osx');
-  } else if (BrowserDetect.OS == "Windows") {
-    $('html').addClass('windows');
-  } else {
-    errors.push("You're not using Windows or Mac OS X. The <b>demo will still work</b> but you will see the Mac UI instead of your own OS's UI. I didn't have time to take a million screenshots!");
-  }
-
-} else {
-  errors.push("Your browser does not support the Fullscreen API. Sorry - this demo will not work for you. Try Chrome or Firefox.");
 }
 
-if (errors.length) {
-  var str = "";
-  $.each(errors, function(i, error) {
-    str += error;
-    if (i != errors.length - 1) {
-      str += "<br><br>";
-    }
-  });
 
-  $.facebox(str);
-}
-
-function setup() {
-  $('#links').show();
-  $('#spoofedSites div').hide();
-  $('#menu, #browser').hide();
-
-  $('html').off('click keypress');
-  $('html').on('click keypress', '#links a', function(e) {
-    
-    $('html')[0].requestFullScreen();
-
-    $('#links').hide();
-    $('#menu, #browser').show();
-
-    var windowHeight = $(window).height();
-    var headerHeight = $('header').height();
-    $('#spoofedSites').css({
-      top: headerHeight,
-      height: windowHeight - headerHeight
-    });
-
-    $('html').off('click keypress');
-    $('html').on('click keypress', function() {
-      playMarioSound();
-      $('#menu, #browser').stop().effect('shake', function() {
-        $.facebox({div: '#phished'});
-      });
-    });
-
-    e.preventDefault();
-    e.stopPropagation();
-  });
-
-  $('html').on('click keypress', '#boaLink', function(e) {
-    $('#boa').show();
-  });
-}
-
-function playMarioSound() {
-  $('body').append('<audio preload="auto" autoplay><source src="sound/mario-death.mp3" /><source src="sound/mario-death.ogg" /></audio>');
+function playFailSound() {
+  $('body').append('<audio preload="auto" autoplay><source src="/hacks/fullscreen-api-attack/sound/mario-death.mp3" /><source src="/hacks/fullscreen-api-attack/sound/mario-death.ogg" /></audio>');
 }
 
 
 $(function() {
 
-  $(document).on('fullscreenchange', function(test) {
-    
-    if (!document.fullscreenEnabled) {
-      setup();
-    
-    }
-
-  });
-
-  setup();
-
-});
-
-
-$(window).load(function() {
-  
-  // preload images
-  $('#spoofedSites img').each(function(i, img) {
+  // Preload target site image
+  $('#spoofSite img').each(function(i, img) {
     var temp = new Image();
     temp.src = img.src;
+  });
+
+  // Detect if the demo will run on user's browser
+  var errors = [];
+  var errorStr = "";
+  if (window.fullscreenSupport) {
+
+    // Browser detect
+    if (BrowserDetect.browser == "Chrome") {
+      $('html').addClass('chrome');
+    } else if (BrowserDetect.browser == "Firefox") {
+      $('html').addClass('firefox');
+    } else if (BrowserDetect.browser == "Safari") {
+      $('html').addClass('safari');
+    } else {
+      $('html').addClass('chrome'); // fallback to wrong UI
+      errors.push("Your browser supports the Fullscreen API! However, it didn't support it when I made this demo. The <b>demo will still work</b> but you will see Chrome's UI instead of your own browser's UI.");
+    }
+
+    // OS detect
+    if (BrowserDetect.OS == "Mac") {
+      $('html').addClass('osx');
+    } else if (BrowserDetect.OS == "Windows") {
+      $('html').addClass('windows');
+    } else if (BrowserDetect.OS == "Linux") {
+      $('html').addClass('linux');
+    } else {
+      errors.push("You're not using an Windows, Mac OS X, or Linux. The <b>demo will not work</b> on your OS.");
+    }
+
+  } else {
+    errors.push("Your browser does not support the Fullscreen API. Sorry - this demo will not work for you. Try Chrome, Firefox, or Safari 6 (on OS X 10.8 Mountain Lion).");
+  }
+
+  // Errors?
+  if (errors.length) {
+    $.each(errors, function(i, error) {
+      errorStr += error;
+      if (i != errors.length - 1) {
+        errorStr += "<br><br>";
+      }
+    });
+  }
+
+  // Set class on html element that represents the fullscreen state
+  $(document).on('fullscreenchange', function(test) {
+    if (document.fullscreenEnabled) {
+      $('html').addClass('fullscreened').removeClass('not-fullscreened');
+    } else {
+      $('html').addClass('not-fullscreened').removeClass('fullscreened');
+      $('html').off('click.spoof');
+    }
+  });
+  $(document).trigger('fullscreenchange');
+
+  // Handle click on target link
+  $('html').on('click', '.spoofLink', function(e) {
     
-    log(img.src);
+    // Prevent navigation to legit link
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Show error if browser doesn't support fullscreen
+    if (!window.fullscreenSupport) {
+      $.facebox(errorStr);
+      return;
+    }
+
+    // Trigger fullscreen
+    requestFullScreen();
+
+    // Set target site to proper height, based on window size
+    $('#spoofSite').css({
+      top: $('#spoofHeader').height(),
+      height: $(window).height()
+    });
+
+    // Callout when the user clicks on something from fake UI
+    $('html').on('click.spoof', function() {
+      playFailSound();
+      $('#spoofHeader').stop().effect('shake', function() {
+        $.facebox({div: '#phished'});
+      });
+    });
   });
 
 });
-
-
-
 

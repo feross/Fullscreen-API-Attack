@@ -12,23 +12,22 @@
   <link rel="stylesheet" href="css/facebox.css">
 </head>
 <body>
-  <header>
-    <div style="display: none;" id="menu"></div>
-    <div style="display: none;" id="browser"></div>
-  </header>
 
-  <div id="links">
-    <a id="boaLink" href="https://www.bankofamerica.com">Bank Of America</a>
+  <a class="spoofLink" href="https://www.bankofamerica.com">Bank Of America</a>
+
+  <div id="spoofHeader">
+    <div id="spoofMenu"></div>
+    <div id="spoofBrowser"></div>
   </div>
 
-  <div id="spoofedSites">
-    <div id="boa" style="display: none;"><img src="img/boa.png"></div>
+  <div id="spoofSite">
+    <img src="/hacks/fullscreen-api-attack/img/boa.png">
   </div>
 
   <div id="phished" style="display: none;">
     <p>
       <b>Whoa, that was a close one!</b><br><br>
-      <img src="img/surprised-gasp-l.png"><br><br>
+      <img src="/hacks/fullscreen-api-attack/img/surprised-gasp-l.png"><br><br>
       <b>Don't get phished.</b> You're looking at fake OS and browser UI.
     </p>
   </div>
@@ -37,8 +36,10 @@
   <script src="js/libs/jquery-ui-1.8.18.custom.min.js"></script>
   <script src="js/libs/facebox.js"></script>
   <script src="js/libs/browser-detect.js"></script>
-  <script src="js/plugins.js"></script>
+  <script src="js/libs/fullscreen-api-shim.js"></script>
+
   <script src="js/script.js"></script>
+
 
 </body>
 </html>
