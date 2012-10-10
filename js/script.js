@@ -5,8 +5,8 @@ $.facebox.settings.loadingImage = '/hacks/fullscreen-api-attack/img/facebox/load
 
 
 function requestFullScreen() {
-  if (elementPrototype.requestFullScreen) {
-    document.documentElement.requestFullScreen();
+  if (elementPrototype.requestFullscreen) {
+    document.documentElement.requestFullscreen();
   } else if (elementPrototype.webkitRequestFullScreen) {
     document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
   } else if (elementPrototype.mozRequestFullScreen) {
