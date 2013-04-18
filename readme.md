@@ -1,3 +1,9 @@
+# HTML5 Fullscreen API Attack
+
+More info: http://feross.org/html5-fullscreen-api-attack/
+
+## Features
+
 Emulates UI of:
 - current browser
 - current OS
@@ -7,3 +13,7 @@ Attack works whether user starts out in fullscreen mode or not
 - In fact, it's even more convincing when user is already fullscreened
 
 Attack preloads all images in background so that UI doesn't flash when images are load
+
+## License
+
+MIT
